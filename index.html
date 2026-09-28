@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Python Quest</title>
+<style>
+:root{--bg:#0f1410;--panel:#161d18;--p2:#1c2420;--line:#2a352e;--text:#e8ede9;--muted:#8a9891;--accent:#6fd98f;--dim:#3d7a4f;--error:#e2795a;--gold:#e8c468;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root{--bg:#f3f6f2;--panel:#fff;--p2:#eef2ed;--line:#d8e0d6;--text:#1b241d;--muted:#5c6b5f;--accent:#227a45;--dim:#bfe3ca;--error:#b8452a;--gold:#a9791f}}
+*{box-sizing:border-box}html{height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;display:flex;flex-direction:column}
+[hidden]{display:none!important}
+header{padding:12px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand b{color:var(--accent)}.stats{display:flex;gap:14px;font-size:13px;color:var(--muted);align-items:center;flex-wrap:wrap}.xp{color:var(--gold);font-weight:600}
+button{font-family:inherit;cursor:pointer}
+.lnk{background:none;border:none;color:var(--muted);font-size:13px;padding:6px}.lnk:hover{color:var(--text)}
+.primary{background:var(--accent);color:#08130a;border:none;font-weight:600;padding:10px 18px;border-radius:6px;font-size:14px}.primary:disabled{opacity:.5}
+.secondary{background:none;border:1px solid var(--line);color:var(--text);padding:10px 14px;border-radius:6px;font-size:14px}
+.next{background:var(--gold);color:#241b02;border:none;font-weight:600;padding:10px 18px;border-radius:6px;font-size:14px}
+#auth{margin:auto;width:min(360px,92vw);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:12px}
+#auth h1{margin:0;font-size:20px}#auth p{margin:0;color:var(--muted);font-size:13px}
+input{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:10px;font:inherit;font-size:14px}
+#dash{padding:20px;max-width:960px;width:100%;margin:0 auto}
+.barwrap{background:var(--p2);border-radius:99px;height:10px;overflow:hidden;margin:8px 0 4px}#bar{height:100%;background:var(--accent);width:0}
+.sub{color:var(--muted);font-size:12px}
+.worlds{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:18px 0}
+.world{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}.world.locked{opacity:.55}
+.world h3{margin:2px 0 4px;font-size:15px}.chips{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.chip{width:40px;height:40px;border-radius:8px;border:1px solid var(--line);background:var(--p2);color:var(--text);font-size:13px}
+.chip.done{background:var(--accent);color:#08130a;border-color:var(--accent)}.chip.cur{border-color:var(--gold);border-width:2px}.chip:disabled{opacity:.4;cursor:not-allowed}
+.ach{display:flex;gap:8px;flex-wrap:wrap}.a{border:1px solid var(--line);border-radius:99px;padding:5px 11px;font-size:12px;color:var(--muted)}.a.on{color:var(--gold);border-color:var(--gold)}
+#learn{flex:1;display:grid;grid-template-columns:340px 1fr;gap:1px;background:var(--line)}
+@media(max-width:900px){#learn{grid-template-columns:1fr}}
+.lesson{background:var(--panel);padding:20px}.lesson h1{font-size:19px;margin:4px 0 12px}.lesson p{font-size:14px;line-height:1.6;margin:0 0 12px}
+.tag{font-size:11px;color:var(--muted);letter-spacing:.06em}
+.example{background:var(--p2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:13px;margin:12px 0;white-space:pre-wrap}
+.task{border-left:3px solid var(--accent);padding-left:12px;margin-top:16px}.task b{color:var(--accent)}
+.right{display:flex;flex-direction:column;background:var(--panel);min-height:0}
+.bar2{display:flex;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+#editor{flex:1;min-height:160px;background:var(--bg);color:var(--text);border:none;outline:none;resize:none;padding:16px;font-size:14px;line-height:1.6;font-family:inherit;tab-size:4}
+.controls{display:flex;gap:10px;padding:12px 16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.console{flex:1;min-height:140px;padding:16px;overflow:auto;font-size:13.5px}.console pre{margin:0;white-space:pre-wrap;word-break:break-word}
+.err{color:var(--error)}.hint-box{margin-top:10px;padding:10px 12px;border-radius:6px;font-size:13px;background:var(--p2);border:1px solid var(--line);color:var(--muted)}
+.ok{margin-top:10px;padding:12px 14px;border-radius:6px;background:var(--accent);color:#08130a;font-weight:600;font-size:14px}
+#fatal{position:fixed;left:0;right:0;bottom:0;background:#b8452a;color:#fff;padding:10px 14px;font-size:12px;z-index:99;white-space:pre-wrap}
+</style></head><body>
+<header><div class="brand">🐍 <b>Python Quest</b></div>
+<div class="stats" id="stats" hidden><span id="lv"></span><span class="xp" id="xp"></span><span id="st"></span><button class="lnk" id="bMap">🗺 Map</button><button class="lnk" id="bOut">Sign out</button></div></header>
+<div id="auth"><h1>Learn Python by playing</h1><p>Sign in to save your progress on any device.</p>
+<input id="em" type="email" placeholder="Email" autocomplete="email"><input id="pw" type="password" placeholder="Password (6+ chars)" autocomplete="current-password">
+<button class="primary" id="bIn">Sign in</button><button class="secondary" id="bUp">Create account</button><p id="am">Loading…</p></div>
+<div id="dash" hidden>
+<button class="primary" id="bGo">▶ Continue your quest</button>
+<div class="sub" style="margin-top:14px">YOUR PROGRESS</div><div class="barwrap"><div id="bar"></div></div><div class="sub" id="barTxt"></div>
+<div class="sub" style="margin-top:10px">Missions unlock in order — finish one to open the next.</div>
+<div class="worlds" id="map"></div><div class="sub" style="margin-bottom:8px">ACHIEVEMENTS</div><div class="ach" id="ach"></div></div>
+<section id="learn" hidden><div class="lesson" id="lessonPane"></div>
+<div class="right"><div class="bar2"><span>main.py</span><span><button class="lnk" id="bReset">Reset</button></span></div>
+<textarea id="editor" spellcheck="false"></textarea>
+<div class="controls"><button class="primary" id="runBtn">▶ Run Code</button><button class="secondary" id="bHint">💡 Hint</button><button class="next" id="nextBtn" hidden>Next Mission →</button></div>
+<div class="console"><div class="tag">OUTPUT</div><pre id="output">Press Run Code to see what happens.</pre><div id="resultArea"></div></div></div></section>
+<div id="fatal" hidden></div>
+<script>
+function fatal(m){var f=document.getElementById('fatal');f.hidden=false;f.textContent='Error: '+m+'  (tap to dismiss)';f.onclick=function(){f.hidden=true}}
+window.addEventListener('error',function(e){fatal(e.message)});window.addEventListener('unhandledrejection',function(e){fatal(e.reason&&e.reason.message||e.reason)});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+(function(){
+if(typeof supabase==='undefined'){document.getElementById('am').textContent='Could not load the app libraries. Check your connection or ad-blocker and reload.';return}
+var sb=supabase.createClient('https://qlkmpkrmjtdcxofcrwxa.supabase.co','sb_publishable_RQVXKezTQ3uhmp4rfwfFMw_M3TDF5xq');
+var $=function(id){return document.getElementById(id)},esc=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')};
+var req=function(n){return Math.round(100*Math.pow(n,1.5))},lvl=function(x){var l=1;while(req(l+1)<=x)l++;return l};
+var S={uid:null,p:null,worlds:[],ch:[],done:{},hints:{},cur:0,ach:[],mine:new Set()},py=null,booting=false;
+function show(v){['auth','dash','learn'].forEach(function(x){$(x).hidden=x!==v});$('stats').hidden=v==='auth'}
+async function auth(m){var e=$('em').value.trim(),p=$('pw').value;$('am').textContent='…';
+ var r=m==='in'?await sb.auth.signInWithPassword({email:e,password:p}):await sb.auth.signUp({email:e,password:p});
+ if(r.error)$('am').textContent=r.error.message;else if(m==='up'&&!r.data.session)$('am').textContent='Check your email to confirm your account, then sign in.';else $('am').textContent=''}
+async function boot(uid){if(booting)return;booting=true;
+ try{S.uid=uid;
+  var res=await Promise.all([sb.from('worlds').select('*').order('number'),sb.from('challenges').select('*'),sb.from('profiles').select('*').eq('id',uid).single(),sb.from('user_progress').select('challenge_id,completed').eq('user_id',uid),sb.from('achievements').select('*').order('sort_order')]);
+  res.forEach(function(r){if(r.error)throw new Error(r.error.message)});
+  S.worlds=res[0].data||[];var num={};S.worlds.forEach(function(x){num[x.id]=x.number});
+  S.ch=(res[1].data||[]).map(function(r){return Object.assign({},r,{starter:r.starter_code,xp:r.xp_reward})}).sort(function(a,b){return num[a.world_id]-num[b.world_id]||a.mission_number-b.mission_number});
+  S.done={};(res[3].data||[]).forEach(function(r){if(r.completed)S.done[r.challenge_id]=true});S.ach=res[4].data||[];
+  await refresh(res[2].data);var f=S.ch.findIndex(function(c){return !S.done[c.id]});S.cur=f<0?0:f;render();show('dash');
+ }catch(e){fatal(e.message);$('am').textContent='Could not load your data: '+e.message;show('auth')}
+ finally{booting=false}}
+async function refresh(pr){S.p=pr||(await sb.from('profiles').select('*').eq('id',S.uid).single()).data;
+ var u=await sb.from('user_achievements').select('achievement_id').eq('user_id',S.uid);S.mine=new Set((u.data||[]).map(function(r){return r.achievement_id}));render()}
+function locked(i){return i>0&&!S.done[S.ch[i-1].id]}
+function render(){var p=S.p;if(!p)return;var l=lvl(p.total_xp),lo=l>1?req(l):0,hi=req(l+1);
+ $('lv').textContent='Level '+l;$('xp').textContent=p.total_xp+' XP';$('st').textContent='🔥 '+p.current_streak+' day streak';
+ $('bar').style.width=Math.min(100,(p.total_xp-lo)/(hi-lo)*100)+'%';$('barTxt').textContent=p.total_xp+' / '+hi+' XP to level '+(l+1);
+ var m=$('map');m.innerHTML='';
+ S.worlds.forEach(function(w){var ix=[];S.ch.forEach(function(c,i){if(c.world_id===w.id)ix.push(i)});
+  var d=ix.filter(function(i){return S.done[S.ch[i].id]}).length,card=document.createElement('div');
+  card.className='world'+(ix.length&&locked(ix[0])?' locked':'');
+  card.innerHTML='<div class="tag">WORLD '+w.number+' · '+d+'/'+ix.length+'</div><h3>'+esc(w.name)+'</h3><div class="sub">'+esc(w.description||'')+'</div>';
+  var ch=document.createElement('div');ch.className='chips';
+  ix.forEach(function(i){var c=S.ch[i],b=document.createElement('button');b.type='button';b.className='chip'+(S.done[c.id]?' done':'')+(i===S.cur?' cur':'');b.textContent=c.difficulty==='boss'?'🐉':c.mission_number;b.title=locked(i)?'Locked — finish the previous mission first':c.title;b.disabled=locked(i);b.addEventListener('click',function(){load(i)});ch.appendChild(b)});
+  card.appendChild(ch);m.appendChild(card)});
+ $('ach').innerHTML=S.ach.map(function(a){return '<span class="a'+(S.mine.has(a.id)?' on':'')+'" title="'+esc(a.description||'')+'">'+a.icon+' '+esc(a.name)+'</span>'}).join('')}
+function load(i){if(i<0||i>=S.ch.length||locked(i))return;S.cur=i;var c=S.ch[i],w=S.worlds.find(function(x){return x.id===c.world_id});
+ $('lessonPane').innerHTML='<div class="tag">WORLD '+w.number+' · MISSION '+c.mission_number+(c.difficulty==='boss'?' · BOSS':'')+' · '+c.xp+' XP</div><h1>'+c.title+'</h1><p>'+c.lesson+'</p><div class="example">'+esc(c.example||'')+'</div><div class="task"><p><b>Your mission:</b> '+c.task+'</p></div><div id="hintArea"></div>';
+ getW();$('editor').value=c.starter;$('output').textContent='Press Run Code to see what happens.';$('resultArea').innerHTML='';$('nextBtn').hidden=true;
+ if(S.done[c.id])banner('✓ Mission already complete');
+ show('learn')}
+function showHint(){var c=S.ch[S.cur],u=S.hints[c.id]||0;if(u>=c.hints.length)return;var d=document.createElement('div');d.className='hint-box';d.textContent='Hint '+(u+1)+': '+c.hints[u];$('hintArea').appendChild(d);S.hints[c.id]=u+1}
+function friendly(e){var m={SyntaxError:"There's a typo in your syntax — check quotes, brackets and colons.",IndentationError:'Indentation matters in Python — check the spaces at the start of your lines.',NameError:"Python doesn't recognize a name. Check spelling and that it was defined first.",TypeError:"You mixed types that don't work together, like text + number.",IndexError:'You asked for a list position that does not exist.',KeyError:'That key is not in the dictionary — check its spelling.'};
+ for(var k in m)if(e.indexOf(k)>=0)return m[k];return 'Something went wrong. Read the message above and try again.'}
+function banner(t){var b=document.createElement('div');b.className='ok';b.textContent=t;$('resultArea').innerHTML='';$('resultArea').appendChild(b);$('nextBtn').hidden=S.cur>=S.ch.length-1}
+function invoke(c,code,ok){return sb.functions.invoke('complete-challenge',{body:{challenge_id:c.id,success:ok,code_submitted:code,hints_used:S.hints[c.id]||0,used_full_solution:(S.hints[c.id]||0)>=c.hints.length}})}
+function log(c,code){if(!S.done[c.id])invoke(c,code,false).catch(function(){})}
+var WSRC="importScripts('https://cdn.jsdelivr.net/npm/pyodide@0.26.2/pyodide.js');var ready=loadPyodide();onmessage=async function(ev){var d=ev.data,out='',err=null,ok=null;try{var P=await ready;P.setStdout({batched:function(s){out+=s+'\\n'}});P.setStderr({batched:function(s){out+=s+'\\n'}});var g=P.toPy({});try{await P.runPythonAsync(d.code,{globals:g});var v=d.v;if(v.type==='variable_equals'){var x=g.get(v.variable);ok=x!==undefined&&x.toString()===String(v.expected)}else if(v.type==='function_test'){ok=v.testCases.every(function(t){var f=g.get(v.functionName);return String(f.apply(null,t.args))===String(t.expected)})}}catch(e){err=e.message||String(e)}}catch(e){err='Could not load Python: '+(e.message||e)}postMessage({id:d.id,out:out,err:err,ok:ok})}";
+var W=null,wid=0,warm=false;
+function getW(){if(!W){W=new Worker(URL.createObjectURL(new Blob([WSRC],{type:'text/javascript'})));warm=false}return W}
+function runPy(code,v){return new Promise(function(res){var w=getW(),id=++wid,done=false;
+ var t=setTimeout(function(){if(done)return;done=true;w.terminate();W=null;res({err:'Timed out — check for infinite loops.',out:'',ok:false})},warm?5000:40000);
+ w.onerror=function(e){if(done)return;done=true;clearTimeout(t);W=null;res({err:'Python could not start: '+(e.message||'worker error'),out:'',ok:false})};
+ w.onmessage=function(ev){if(ev.data.id!==id||done)return;done=true;clearTimeout(t);warm=true;res(ev.data)};
+ w.postMessage({id:id,code:code,v:v})})}
+async function runCode(){var run=$('runBtn'),c=S.ch[S.cur],code=$('editor').value;run.disabled=true;run.textContent='Running…';$('resultArea').innerHTML='';
+ if(!warm)$('output').textContent='Loading Python… (first run takes a few seconds)';
+ try{var r=await runPy(code,c.validation),t=(r.out||'').trimEnd().slice(0,10000);
+  if(r.err){$('output').innerHTML='<span class="err">'+esc(r.err.split('\n').slice(-3).join('\n'))+'</span>';$('resultArea').innerHTML='<div class="hint-box">💡 '+esc(friendly(r.err))+'</div>';log(c,code)}
+  else{$('output').textContent=t||'(no output)';check(c,t,r.ok,code)}
+ }catch(e){$('output').textContent='Could not run code: '+(e.message||e)}
+ finally{run.disabled=false;run.textContent='▶ Run Code'}}
+function check(c,out,wok,code){var v=c.validation,ok=false;
+ if(v.type==='output_match')ok=out.trim()===v.expected;
+ else if(v.type==='output_contains')ok=v.substrings.every(function(s){return out.indexOf(s)>=0});
+ else ok=wok===true;
+ if(!ok){$('resultArea').innerHTML='<div class="hint-box">Not quite yet — try again, or tap Hint for a nudge.</div>';log(c,code);return}
+ if(S.done[c.id]){banner('✓ Mission already complete');return}finish(c,code)}
+async function finish(c,code){$('resultArea').innerHTML='<div class="hint-box">Saving…</div>';
+ var r=await invoke(c,code,true),data=r.data,error=r.error;
+ if(error||!data||!data.ok){$('resultArea').innerHTML='<div class="hint-box err">'+(error&&error.context&&error.context.status===429?'Too many submissions — wait a minute and run again.':'Correct! But saving failed — check your connection and run again.')+'</div>';return}
+ S.done[c.id]=true;await refresh();banner('🎉 Mission complete! +'+data.xp_earned+' XP')}
+$('bIn').addEventListener('click',function(){auth('in')});$('bUp').addEventListener('click',function(){auth('up')});
+$('bMap').addEventListener('click',function(){render();show('dash')});$('bOut').addEventListener('click',function(){sb.auth.signOut()});
+$('bGo').addEventListener('click',function(){load(S.cur)});$('bReset').addEventListener('click',function(){$('editor').value=S.ch[S.cur].starter});
+$('runBtn').addEventListener('click',runCode);$('bHint').addEventListener('click',showHint);$('nextBtn').addEventListener('click',function(){load(S.cur+1)});
+$('pw').addEventListener('keydown',function(e){if(e.key==='Enter')auth('in')});
+sb.auth.onAuthStateChange(function(ev,s){setTimeout(function(){if(s&&s.user){if(S.uid!==s.user.id||!S.p)boot(s.user.id)}else{S.uid=null;S.p=null;show('auth');$('am').textContent=''}},0)});
+sb.auth.getSession().then(function(r){if(!r.data.session){show('auth');$('am').textContent=''}});
+})();
+</script></body></html>
